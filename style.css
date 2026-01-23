@@ -15,6 +15,7 @@ main {
   width: 100%;
   height: 100%;
   padding: 1rem;
+  overflow: hidden;
   background-color: #1e1e1e;
   background-image:
     linear-gradient(#434242 1px, transparent 1px),
@@ -86,6 +87,64 @@ main .other .properties-panel .prop input {
   outline: none;
 }
 
+main .other .properties-panel  .set {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+main .other .properties-panel  .set i {
+ padding: 0.3rem 0.4rem;
+ border-radius: 50%;
+ border: 1px solid  #ccc;
+ color: #ccc;
+ background-color: transparent;
+}
+
+main .other .properties-panel .width .set i:active{
+  transform: scale(0.95);
+}
+
+main .other .properties-panel .props{
+  display: flex;
+  width: 100%;
+  padding: 0.4rem;
+  /* flex-direction: column; */
+  gap: 0.3rem;
+}
+
+main .other .properties-panel .props #delete{
+  padding: 0.4rem;
+  background-color: red;
+  color: #e4e2e2;
+  border: none;
+  border-radius: 0.7rem;
+}
+
+main .other .properties-panel .props .move{
+  padding: 0.4rem;
+  background-color:#43424275;
+  color: #e4e2e2;
+  border: none;
+  border-radius: 0.7rem;
+}
+
+main .other .properties-panel .props .move:active{
+ transform: scale(0.98);
+}
+
+
+main .other .properties-panel .props #delete:active{
+  transform: scale(0.98);
+}
+
+main .other .properties-panel .bg input{
+width: 100%;
+background-color: #232121;}
+
+
+
+
 main .other .properties-panel .text-content {
   display: flex;
   flex-direction: column;
@@ -103,7 +162,7 @@ main .other .canvas {
   display: flex;
   flex-direction: column;
   width: 84%;
-  height: 82vh;
+  height: 100%;
   /* padding: 1rem; */
   border-radius: 0.7rem;
   border: 1px solid rgb(79, 78, 78);
@@ -111,9 +170,11 @@ main .other .canvas {
   background-color: #383636dc;
 }
 
-main .other .laywer-panel {
+main .other .layer-panel {
   width: 10%;
-  height: 400px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   background-color: #383636dc;
   border-radius: 0.7rem;
 
@@ -132,15 +193,15 @@ main .other .laywer-panel {
 .border {
   position: absolute;
   border: 2px solid rgb(131, 131, 135);
-  background: rgba(0, 150, 255, 0.2); /* makes it visible */
+  background-color: rgba(0, 150, 255, 0.2); /* makes it visible */
 }
 
 .text {
   position: absolute;
   font-size: 18px;
-  color: black;
+  color: rgb(114, 79, 79);
   min-width: 50px;
-  border: none; /* ensure no border */
+  border: 1px solid rgb(131, 131, 135);  /* ensure no border */
   background: transparent; /* optional */
   text-decoration: none;
 }
