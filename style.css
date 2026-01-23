@@ -101,7 +101,7 @@ main .other .properties-panel  .set i {
  background-color: transparent;
 }
 
-main .other .properties-panel .width .set i:active{
+main .other .properties-panel  .set i:active{
   transform: scale(0.95);
 }
 

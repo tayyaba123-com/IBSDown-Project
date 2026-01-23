@@ -141,7 +141,7 @@ canvas.addEventListener("mousedown", (e) => {
       e.target.classList.contains("text")
     ) {
       dragTarget = e.target;
-      dragTarget.style.borderColor = "red";
+      // dragTarget.style.borderColor = "red";
 
       // console.log(dragTarget,x)
       offsetX = x - parseInt(dragTarget.style.left);
@@ -344,3 +344,4 @@ canvas.addEventListener("mouseup", (e) => {
   drawing = false;
   dragTarget = null;
 });
+
