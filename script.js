@@ -8,7 +8,6 @@ let deleteButton = document.querySelector("#delete");
 let moveUpButton = document.querySelector("#moveUp");
 let moveDownButton = document.querySelector("#moveDown");
 
-// console.log(boxColor.value)
 let textElement = document.querySelector("#text");
 
 let idIcon = null;
@@ -44,7 +43,6 @@ let textSelector = null;
 //     radius: 4
 // }
 
-
 icons.forEach((i) => {
   console.log(i);
   i.addEventListener("click", () => {
@@ -64,15 +62,15 @@ icons.forEach((i) => {
   });
 });
 
-// Toolbar button click logic
+//tool-bar
 toolsBtn.forEach((btn) => {
   btn.addEventListener("click", () => {
-    // remove active from all buttons
+    // removes active from all buttons
     toolsBtn.forEach((b) => b.classList.remove("active"));
-    // add active to clicked button
+    // adds active class, when clicked button
     btn.classList.add("active");
 
-    // set the current tool based on ID
+    // tihs sets the current tool based on ID
     if (btn.id === "rectangle") currentTool = "rectangle";
     else if (btn.id === "textBox") currentTool = "textBox";
     else if (btn.id === "hand") currentTool = "hand";
@@ -114,7 +112,7 @@ canvas.addEventListener("mousedown", (e) => {
     drawing = true;
 
     box = document.createElement("div");
-    box.id = Date.now()
+    box.id = Date.now();
     box.classList.add("border");
     box.style.left = StartX + "px";
     box.style.top = StartY + "px";
@@ -125,13 +123,12 @@ canvas.addEventListener("mousedown", (e) => {
   } else if (currentTool === "textBox") {
     const textBox = document.createElement("div");
     textBox.contentEditable = true;
-    textBox.id =Date.now()
+    textBox.id = Date.now();
     textBox.classList.add("text");
     textBox.contentEditable = true;
     textBox.style.left = StartX + "px";
     textBox.style.top = StartY + "px";
-    // textBox.innerText =
-    // textSelector = textBox;
+
     canvas.appendChild(textBox);
     textElement.value = "";
     textBox.focus(); // auto focus so you can start typing
@@ -141,11 +138,8 @@ canvas.addEventListener("mousedown", (e) => {
       e.target.classList.contains("text")
     ) {
       dragTarget = e.target;
-      // dragTarget.style.borderColor = "red";
 
-      // console.log(dragTarget,x)
       offsetX = x - parseInt(dragTarget.style.left);
-      // console.log(offsetX)
       offsetY = y - parseInt(dragTarget.style.top);
     }
   } else if (currentTool === "rotating-ac") {
@@ -174,7 +168,6 @@ canvas.addEventListener("mousedown", (e) => {
     if (e.target.classList.contains("border")) {
       resizeTarget = e.target;
       offsetXR = x - parseInt(resizeTarget.style.left);
-      // console.log(offsetX)
       offsetYR = y - parseInt(resizeTarget.style.top);
     }
   } else if (
@@ -183,9 +176,10 @@ canvas.addEventListener("mousedown", (e) => {
   ) {
     plusTarget = e.target;
   }
-  // console.log(selectedElement)
+  
 });
 
+//propproperties Panel section
 propertiesPanel.addEventListener("mousedown", () => {
   if (!plusTarget) return;
 
@@ -207,9 +201,8 @@ propertiesPanel.addEventListener("mousedown", () => {
 textElement.addEventListener("input", (e) => {
   if (!textSelector) return;
 
-  // Ensure we are targeting the right element
+ 
   if (textSelector.classList.contains("text")) {
-    // Sync the input value to the div's text
     textSelector.innerText = e.target.value;
     console.log(e.target);
   }
@@ -227,10 +220,9 @@ moveUpButton.addEventListener("click", () => {
 
   const currentTop = parseInt(selectedElement.style.top);
 
-    if(currentTop-5>=0){
-
-  selectedElement.style.top = selectedElement.offsetTop - 5 + "px";
-    }
+  if (currentTop - 5 >= 0) {
+    selectedElement.style.top = selectedElement.offsetTop - 5 + "px";
+  }
 });
 
 moveDownButton.addEventListener("click", () => {
@@ -240,18 +232,17 @@ moveDownButton.addEventListener("click", () => {
   const boxHeight = parseInt(selectedElement.style.height);
   const info = canvas.getBoundingClientRect();
 
-
-  
-  if(boxHeight+currentTop+5<=info.height){
-
+  if (boxHeight + currentTop + 5 <= info.height) {
     selectedElement.style.top = selectedElement.offsetTop + 5 + "px";
   }
 });
 
+//box color feature
 boxColor.addEventListener("input", (e) => {
   if (!selectedElement) return;
   selectedElement.style.backgroundColor = e.target.value;
 });
+
 
 window.addEventListener("keydown", (e) => {
   console.log(e.key);
@@ -261,26 +252,23 @@ window.addEventListener("keydown", (e) => {
   const boxHeight = parseInt(selectedElement.style.height);
   const boxWidth = parseInt(selectedElement.style.width);
 
-
   const info = canvas.getBoundingClientRect();
 
   console.log(currentLeft);
 
   if (e.key === "ArrowDown") {
-    if ((boxHeight+currentTop+5) <= info.height) {
+    if (boxHeight + currentTop + 5 <= info.height) {
       selectedElement.style.top = selectedElement.offsetTop + 5 + "px";
     }
-  
-  } else if  (e.key === "ArrowUp") {
-    if(currentTop - 5 >= 0) {
+  } else if (e.key === "ArrowUp") {
+    if (currentTop - 5 >= 0) {
       selectedElement.style.top = selectedElement.offsetTop - 5 + "px";
     }
   } else if (e.key === "ArrowRight") {
-    if  ((boxWidth+currentLeft+5) <= info.width)  {
+    if (boxWidth + currentLeft + 5 <= info.width) {
       selectedElement.style.left = selectedElement.offsetLeft + 5 + "px";
     }
-  } 
-  else if (e.key === "ArrowLeft"){ 
+  } else if (e.key === "ArrowLeft") {
     if (currentLeft - 5 >= 0) {
       selectedElement.style.left = selectedElement.offsetLeft - 5 + "px";
     }
@@ -291,10 +279,7 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
-// script.js:230 ArrowDown
-// script.js:230 ArrowRight
-// script.js:230 ArrowLeft
-// script.js:230 ArrowUp
+
 canvas.addEventListener("mousemove", (e) => {
   const rect = canvas.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -323,18 +308,17 @@ canvas.addEventListener("mousemove", (e) => {
     }
 
     // Vertical Constraints (Top/Bottom)
-    // 1. Top: Prevent the item from going above the container
+    // this  Prevents the item from going above the container
     if (newY < 0) {
       newY = 0;
     }
 
-    // 2. Bottom: Prevent the item from going below the container
-    // We check if the top position + the item's height exceeds the container's height
+    // this one prevents the item from going below the container
     if (newY + dragTarget.offsetHeight > containerRect.height) {
       newY = containerRect.height - dragTarget.offsetHeight;
     }
 
-    // Apply the final validated positions
+  
     dragTarget.style.left = newX + "px";
     dragTarget.style.top = newY + "px";
   }
@@ -344,4 +328,3 @@ canvas.addEventListener("mouseup", (e) => {
   drawing = false;
   dragTarget = null;
 });
-
