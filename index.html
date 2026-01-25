@@ -14,7 +14,8 @@
     
 
     <main>
-        <div class="tool-panel">
+        <div class="tool-panel-Export">
+             <div class="tool-panel">
             <div id="hand" class="hand tool"><i class="ri-hand"></i></div>
             <div id="mouse " class="mouse tool"><i class="ri-cursor-fill"></i></div>
             <div id="rectangle" class="reactngle tool"><i class="ri-rectangle-fill"></i></div>
@@ -22,6 +23,13 @@
             <div id="rotating-ac" class="rotating-ac tool"><i class="ri-anticlockwise-fill"></i></div>
              <div id="rotating-c" class="rotating-c tool"><i class="ri-clockwise-fill"></i></div>
         </div>
+
+        <div class="exports">
+            <button id="jsonexport">JSON From Export</button>
+            <button  id="htmlexport">HTML form Export</button>
+        </div>
+        </div>
+       
         
 
         <div class="other">
@@ -29,16 +37,16 @@
                 <div class="width prop">
                     <h4>Width  </h4>
                      <div class="set">
-                        <i id="plusW" class="ri-add-line"></i>
-                        <i id="minusW" class="ri-subtract-line"></i>
+                        <i data-action="plusW"  class="ri-add-line"></i>
+                        <i data-action="minusW" class="ri-subtract-line"></i>
                      </div>
                 </div>
 
                 <div class="height prop">
                     <h4>Heigth  </h4>
                     <div class="set">
-                     <i id="plusH" class="ri-add-line"></i>
-                    <i id="minusH" class="ri-subtract-line"></i>
+                     <i data-action="plusH" class="ri-add-line"></i>
+                    <i  data-action="minusH"  class="ri-subtract-line"></i>
                     </div>
                   
                 </div>

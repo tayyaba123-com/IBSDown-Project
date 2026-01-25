@@ -7,6 +7,8 @@ let propertiesPanel = document.querySelector(".properties-panel");
 let deleteButton = document.querySelector("#delete");
 let moveUpButton = document.querySelector("#moveUp");
 let moveDownButton = document.querySelector("#moveDown");
+let jsonbtn = document.querySelector("#jsonexport");
+let htmlexportbtn = document.querySelector("#htmlexport");
 
 let textElement = document.querySelector("#text");
 
@@ -29,64 +31,52 @@ let selectedItem = null;
 let plusTarget = null;
 let selectedElement = null;
 let textSelector = null;
-// let element={
-//    id: "el_1",
-//     type: "rect",
-//     x: ,
-//     y: 80,
-//     w: 150,
-//     h: 100,
-//     rotate: 0,
-//     bg: "#3b82f6",
-//     opacity: 100,
-//     visible: true,
-//     radius: 4
-// }
+function removeSelectors(el) {
+  if (!el) return;
+  el.querySelectorAll(".seletors").forEach((s) => s.remove());
+  // el.style.borderColor="pink"
+}
 
-icons.forEach((i) => {
-  console.log(i);
-  i.addEventListener("click", () => {
-    if (i.id == "plusW") {
-      currentTool = "plusW";
-    } else if (i.id == "minusW") {
-      currentTool = "minusW";
-    } else if (i.id == "plusH") {
-      currentTool = "plusH";
-    } else if (i.id == "minusH") {
-      currentTool = "minusH";
-    } else if (boxColor.id == "bgcolor") {
-      currentTool = "bgcolor";
-    } else {
-      currentTool = null;
-    }
+function addSelectors(el) {
+  ["tl", "tr", "bl", "br"].forEach((pos) => {
+    const h = document.createElement("div");
+    h.classList.add("seletors", pos);
+    el.appendChild(h);
+    // el.style.borderColor="red"
   });
-});
+}
+
 
 //tool-bar
 toolsBtn.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    // removes active from all buttons
+  btn.addEventListener("click", (e) => {
+    // e.stopPropagation();
+    // removes active class from all buttons
     toolsBtn.forEach((b) => b.classList.remove("active"));
     // adds active class, when clicked button
     btn.classList.add("active");
 
-    // tihs sets the current tool based on ID
+    // this sets the current tool based on ID
     if (btn.id === "rectangle") currentTool = "rectangle";
     else if (btn.id === "textBox") currentTool = "textBox";
     else if (btn.id === "hand") currentTool = "hand";
     else if (btn.id === "rotating-ac") currentTool = "rotating-ac";
     else if (btn.id === "rotating-c") currentTool = "rotating-c";
     else if (btn.id === "mouse") currentTool = "mouse";
-    // else if()
     else currentTool = null;
   });
 });
 
-//  Canvas mouse events
+function removeSelectors(el) {
+  if (!el) return;
+  el.querySelectorAll(".seletors").forEach((s) => s.remove());
+}
+
+//  Canvas mousedown  event
 canvas.addEventListener("mousedown", (e) => {
   if (!currentTool) return;
 
-  const rect = canvas.getBoundingClientRect();
+  const rect = canvas.getBoundingClientRect(); //this function returns us canvas DOM object that conatins properties like , width,height and more
   console.log(rect);
 
   console.log(e.clientX, rect.left);
@@ -113,6 +103,7 @@ canvas.addEventListener("mousedown", (e) => {
 
     box = document.createElement("div");
     box.id = Date.now();
+    
     box.classList.add("border");
     box.style.left = StartX + "px";
     box.style.top = StartY + "px";
@@ -120,6 +111,11 @@ canvas.addEventListener("mousedown", (e) => {
     box.style.height = "0px";
 
     canvas.appendChild(box);
+
+    if (box.classList.contains("border")) {
+      addSelectors(box);
+    }
+    
   } else if (currentTool === "textBox") {
     const textBox = document.createElement("div");
     textBox.contentEditable = true;
@@ -131,13 +127,26 @@ canvas.addEventListener("mousedown", (e) => {
 
     canvas.appendChild(textBox);
     textElement.value = "";
-    textBox.focus(); // auto focus so you can start typing
+    textBox.focus(); // auto focus when , start typing
   } else if (currentTool === "hand") {
     if (
       e.target.classList.contains("border") ||
       e.target.classList.contains("text")
     ) {
+      if (selectedElement && selectedElement !== e.target) {
+        removeSelectors(selectedElement);
+      }
+
+      // set new selected box
+      selectedElement = e.target;
       dragTarget = e.target;
+
+      // add selectors to current box
+      if (dragTarget.classList.contains("border")) {
+        addSelectors(dragTarget);
+      }
+
+      // dragTarget = e.target;
 
       offsetX = x - parseInt(dragTarget.style.left);
       offsetY = y - parseInt(dragTarget.style.top);
@@ -176,23 +185,27 @@ canvas.addEventListener("mousedown", (e) => {
   ) {
     plusTarget = e.target;
   }
-  
 });
 
 //propproperties Panel section
-propertiesPanel.addEventListener("mousedown", () => {
+propertiesPanel.addEventListener("mousedown", (e) => {
   if (!plusTarget) return;
 
-  if (currentTool === "plusW") {
+  const btn = e.target.dataset.action;
+  if (!btn) return;
+
+  if (btn === "plusW") {
+    console.log(btn);
+    // console.log(currentTool)
     const currentWidthI = plusTarget.offsetWidth;
     plusTarget.style.width = currentWidthI + 10 + "px";
-  } else if (currentTool === "minusW") {
+  } else if (btn === "minusW") {
     const currentWidthD = plusTarget.offsetWidth;
     plusTarget.style.width = currentWidthD - 10 + "px";
-  } else if (currentTool === "plusH") {
+  } else if (btn === "plusH") {
     const currentHeightI = plusTarget.offsetHeight;
     plusTarget.style.height = currentHeightI + 10 + "px";
-  } else if (currentTool === "minusH") {
+  } else if (btn === "minusH") {
     const currentHeightD = plusTarget.offsetHeight;
     plusTarget.style.height = currentHeightD - 10 + "px";
   }
@@ -201,7 +214,6 @@ propertiesPanel.addEventListener("mousedown", () => {
 textElement.addEventListener("input", (e) => {
   if (!textSelector) return;
 
- 
   if (textSelector.classList.contains("text")) {
     textSelector.innerText = e.target.value;
     console.log(e.target);
@@ -243,7 +255,6 @@ boxColor.addEventListener("input", (e) => {
   selectedElement.style.backgroundColor = e.target.value;
 });
 
-
 window.addEventListener("keydown", (e) => {
   console.log(e.key);
   if (!selectedElement) return;
@@ -278,7 +289,6 @@ window.addEventListener("keydown", (e) => {
     selectedElement = null;
   }
 });
-
 
 canvas.addEventListener("mousemove", (e) => {
   const rect = canvas.getBoundingClientRect();
@@ -318,13 +328,125 @@ canvas.addEventListener("mousemove", (e) => {
       newY = containerRect.height - dragTarget.offsetHeight;
     }
 
-  
     dragTarget.style.left = newX + "px";
     dragTarget.style.top = newY + "px";
   }
 });
 
 canvas.addEventListener("mouseup", (e) => {
+  if (dragTarget == e.target) {
+    removeSelectors(selectedElement);
+  }
+
+  if (box.classList.contains("border")) {
+    removeSelectors(box);
+  }
+
   drawing = false;
   dragTarget = null;
 });
+
+function getCanvasData() {
+  const elements = [];
+
+  document.querySelectorAll(".border, .text").forEach((el) => {
+    elements.push({
+      id: el.id,
+      type: el.classList.contains("border") ? "rect" : "text",
+      x: parseInt(el.style.left),
+      y: parseInt(el.style.top),
+      w: el.offsetWidth || null,
+      h: el.offsetHeight || null,
+      bg: el.style.backgroundColor || null,
+      text: el.classList.contains("text") ? el.innerText : null,
+      rotate: el.style.transform || "rotate(0deg)",
+    });
+  });
+
+  return elements;
+}
+
+//json export
+
+jsonbtn.addEventListener("click", exportJSON);
+
+function exportJSON() {
+  const data = getCanvasData();
+  const blob = new Blob([JSON.stringify(data, null, 2)], {
+    type: "application/json",
+  });
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "canvas-design.json";
+  a.click();
+
+  URL.revokeObjectURL(a.href);
+}
+
+//html export
+
+function getCanvasHTML() {
+  let html = "";
+
+  document.querySelectorAll(".border, .text").forEach((el) => {
+    const style = `
+      position:absolute;
+      left:${el.style.left};
+      top:${el.style.top};
+      width:${el.offsetWidth}px;
+      height:${el.offsetHeight}px;
+      background:${el.style.backgroundColor || "transparent"};
+      transform:${el.style.transform || "rotate(0deg)"};
+    `;
+
+    if (el.classList.contains("border")) {
+      html += `<div style="${style}"></div>\n`;
+    } else {
+      html += `<div style="${style}">${el.innerText}</div>\n`;
+    }
+  });
+
+  return html;
+}
+
+htmlexportbtn.addEventListener("click", exportHTML);
+
+function exportHTML() {
+  const bodyContent = getCanvasHTML();
+
+  const fullHTML = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Canvas Export</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f4f4f5;
+    }
+    .canvas {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="canvas">
+    ${bodyContent}
+  </div>
+</body>
+</html>
+`;
+
+  const blob = new Blob([fullHTML], { type: "text/html" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "canvas-design.html";
+  a.click();
+
+  URL.revokeObjectURL(a.href);
+}
